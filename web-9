@@ -1,0 +1,378 @@
+Q.1 What are hooks in react? how to identify hooks?
+Hooks in React are functions that allow you to use state and other React features in functional components.
+They provide a way to add state and lifecycle methods to functional components, which were previously only available in class components.
+Hooks were introduced in React 16.8 and provide a more concise and flexible approach to managing state and side effects.
+Hooks can be identified by their naming convention. They all start with the prefix "use" followed by the name of the hook, such as useState, useEffect, useContext, etc.
+##################################################################################################################################
+Q.2 Explain useState Hook & what can you achieve with it?
+The useState hook is one of the most commonly used hooks in React.
+It allows functional components to have their own state. 
+The useState hook takes an initial value as an argument and returns an array with two elements:
+the current state value and a function to update the state.
+
+Here's an example of how to use the useState hook:
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}
+
+##################################################################################################################################
+Q.3 How to pass data from one component to another component
+Props: Props (short for properties) are used to pass data from a parent component to its child component.
+You can pass data as props when rendering a child component and access it within the child component using the props object.
+// ParentComponent.js
+import React from 'react';
+import ChildComponent from './ChildComponent';
+
+function ParentComponent() {
+  const data = 'Hello from Parent';
+
+  return <ChildComponent message={data} />;
+}
+
+// ChildComponent.js
+import React from 'react';
+
+function ChildComponent(props) {
+  return <p>{props.message}</p>;
+}
+Context API: React's Context API allows you to create a context object to share data across components in a component tree without passing props manually at each level.
+Components can access the data using the useContext hook or the Consumer component.
+Example:
+import React, { createContext, useContext } from 'react';
+
+const MyContext = createContext();
+
+function ParentComponent() {
+  const data = 'Hello from Parent';
+
+  return (
+    <MyContext.Provider value={data}>
+      <ChildComponent />
+    </MyContext.Provider>
+  );
+}
+
+function ChildComponent() {
+  const data = useContext(MyContext);
+
+  return <p>{data}</p>;
+}
+State management libraries: State management libraries like Redux or MobX can be used to store and manage shared data.
+Components can access and update the shared data using actions and reducers provided by the state management library.
+// Redux example
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment } from './actions';
+
+function ParentComponent() {
+  const dispatch = useDispatch();
+
+  const incrementCounter = () => {
+    dispatch(increment());
+  };
+
+  return (
+    <div>
+      <ChildComponent />
+      <button onClick={incrementCounter}>Increment</button>
+    </div>
+  );
+}
+
+function ChildComponent() {
+  const counter = useSelector((state) => state.counter);
+
+  return <p>Counter: {counter}</p>;
+}
+
+##################################################################################################################################
+Q.4 What is the significance of the "key" prop in React lists, and why is it important to use it correctly?
+The "key" prop in React lists is a special attribute used to give a unique identifier to each item in the list.
+It helps React efficiently update and reorder the list when there are changes to the list items.
+
+The "key" prop is important to use correctly because it allows React to optimize the rendering process.
+When a list is re-rendered, React compares the "key" prop of each item in the new list with the corresponding item in the previous list.
+By using a unique "key" for each item, React can determine which items are new, removed, or re-ordered, and update only the necessary parts of the DOM instead of re-rendering the entire list.
+This improves performance and avoids unnecessary re-renders.
+
+Using a stable and unique "key" for list items is crucial to ensure proper rendering and avoid potential issues like incorrect updates, duplicate keys, or missing items.
+It's recommended to use a unique identifier from the data itself, such as an ID or a unique property, as the "key" prop.
+
+##################################################################################################################################
+Q.5 What is the significance of using "setState" instead of modifying state directly in React?
+It is important to use the setState function instead of modifying the state directly because React uses the setState function to track state changes and trigger the re-rendering process.
+
+When you directly modify the state object, React doesn't detect the changes, and it won't re-render the component to reflect the updated state.
+By using the setState function, React is able to properly track state changes and efficiently update the UI.
+
+The setState function provided by React also ensures that state updates are batched and executed in a consistent and efficient manner.
+It merges the new state with the previous state and performs the necessary updates to trigger re-rendering.
+Additionally, when you use setState, React can perform optimizations like shallow comparisons to avoid unnecessary re-renders.
+It can also batch multiple setState calls into a single update, optimizing performance.
+
+##################################################################################################################################
+Q.6 Explain the concept of React fragments and when you should use them.
+ React fragments are a way to group multiple elements together without introducing an extra DOM node.
+They allow you to return multiple elements from a component's render method without the need for a wrapping element.
+React fragments are useful in scenarios where you want to return adjacent elements from a component's render method but don't want to introduce an additional wrapping element that could affect the layout or styling.
+Fragments help to keep the JSX syntax clean and maintain a logical structure in the component hierarchy.
+import React from 'react';
+
+function MyComponent() {
+  return (
+    <>
+      <h1>Title</h1>
+      <p>Paragraph 1</p>
+      <p>Paragraph 2</p>
+    </>
+  );
+}
+
+##################################################################################################################################
+Q.7 How do you handle conditional rendering in React?
+Conditional rendering in React is the ability to conditionally render different components or elements based on certain conditions or values.
+It allows you to control what gets rendered in the UI based on the state or props of the component.
+
+There are several ways to handle conditional rendering in React:
+
+If statements: You can use regular JavaScript if statements inside the render method or functional component to conditionally render different elements or components based on a condition.
+
+Ternary operator: The ternary operator (condition ? true expression : false expression) allows you to conditionally render different elements or components based on a condition in a more concise way.
+
+Logical && operator: The logical && operator can be used to conditionally render an element or component based on a condition.
+If the condition is true, the element or component is rendered; otherwise, it is skipped.
+
+Switch statements: For more complex conditional rendering, you can use JavaScript switch statements to handle different cases and render different components or elements based on specific conditions.
+
+##################################################################################################################################
+Q.8 Todolist
+import React, { useState } from 'react';
+
+function TodoApp() {
+  const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  const handleChange = (event) => {
+    setTask(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (task.trim() !== '') {
+      setTasks([...tasks, task]);
+      setTask('');
+    }
+  };
+
+  return (
+    <div className="todo-app">
+      <h1>Todo App</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Enter a task"
+          value={task}
+          onChange={handleChange}
+        />
+        <button type="submit">Add Task</button>
+      </form>
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>{task}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default TodoApp;
+-------------------------------------------
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TodoApp from './TodoApp';
+
+ReactDOM.render(<TodoApp />, document.getElementById('root'));
+
+##################################################################################################################################
+Q.9. Todolist
+import React, { useState } from 'react';
+
+function TodoApp() {
+  const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  const handleChange = (event) => {
+    setTask(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (task.trim() !== '') {
+      setTasks([...tasks, { text: task, status: 'pending' }]);
+      setTask('');
+    }
+  };
+
+  const updateStatus = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].status = 'completed';
+    setTasks(updatedTasks);
+  };
+
+  const removeTodo = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+  };
+
+  return (
+    <div className="todo-app">
+      <h1>Todo App</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Enter a task"
+          value={task}
+          onChange={handleChange}
+        />
+        <button type="submit">Add Task</button>
+      </form>
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            {task.text}
+            <button onClick={() => updateStatus(index)}>Update Status</button>
+            <button onClick={() => removeTodo(index)}>Remove Todo</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default TodoApp;
+----------------------------------------------
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TodoApp from './TodoApp';
+
+ReactDOM.render(<TodoApp />, document.getElementById('root'));
+
+##################################################################################################################################
+Q10. Build Calculator Web app using React?
+import React, { useState } from 'react';
+
+function CalculatorApp() {
+  const [display, setDisplay] = useState('0');
+  const [currentValue, setCurrentValue] = useState('');
+  const [operator, setOperator] = useState('');
+  const [previousValue, setPreviousValue] = useState('');
+
+  const handleNumberClick = (value) => {
+    setCurrentValue(currentValue + value);
+    setDisplay(currentValue + value);
+  };
+
+  const handleOperatorClick = (value) => {
+    if (currentValue !== '') {
+      setOperator(value);
+      setPreviousValue(currentValue);
+      setCurrentValue('');
+      setDisplay(value);
+    }
+  };
+
+  const handleEqualClick = () => {
+    const currentValueFloat = parseFloat(currentValue);
+    const previousValueFloat = parseFloat(previousValue);
+
+    let result;
+    switch (operator) {
+      case '+':
+        result = previousValueFloat + currentValueFloat;
+        break;
+      case '-':
+        result = previousValueFloat - currentValueFloat;
+        break;
+      case '*':
+        result = previousValueFloat * currentValueFloat;
+        break;
+      case '/':
+        result = previousValueFloat / currentValueFloat;
+        break;
+      default:
+        return;
+    }
+
+    setCurrentValue(result.toString());
+    setDisplay(result.toString());
+    setOperator('');
+    setPreviousValue('');
+  };
+
+  const handleClearClick = () => {
+    setCurrentValue('');
+    setOperator('');
+    setPreviousValue('');
+    setDisplay('0');
+  };
+
+  return (
+    <div className="calculator-app">
+      <h1>Calculator</h1>
+      <div className="calculator-display">{display}</div>
+      <div className="calculator-buttons">
+        <div className="row">
+          <button onClick={() => handleNumberClick('7')}>7</button>
+          <button onClick={() => handleNumberClick('8')}>8</button>
+          <button onClick={() => handleNumberClick('9')}>9</button>
+          <button onClick={() => handleOperatorClick('/')}>/</button>
+        </div>
+        <div className="row">
+          <button onClick={() => handleNumberClick('4')}>4</button>
+          <button onClick={() => handleNumberClick('5')}>5</button>
+          <button onClick={() => handleNumberClick('6')}>6</button>
+          <button onClick={() => handleOperatorClick('*')}>*</button>
+        </div>
+        <div className="row">
+          <button onClick={() => handleNumberClick('1')}>1</button>
+          <button onClick={() => handleNumberClick('2')}>2</button>
+          <button onClick={() => handleNumberClick('3')}>3</button>
+          <button onClick={() => handleOperatorClick('-')}>-</button>
+        </div>
+        <div className="row">
+          <button onClick={() => handleNumberClick('0')}>0</button>
+          <button onClick={() => handleOperatorClick('.')}>.</button>
+          <button onClick={handleEqualClick}>=</button>
+          <button onClick={() => handleOperatorClick('+')}>+</button>
+        </div>
+        <div className="row">
+          <button onClick={handleClearClick}>Clear</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CalculatorApp;
+-----------------------------------------
+import React from 'react';
+import ReactDOM from 'react-dom';
+import CalculatorApp from './CalculatorApp';
+
+ReactDOM.render(<CalculatorApp />, document.getElementById('root'));
+
+##################################################################################################################################
